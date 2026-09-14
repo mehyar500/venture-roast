@@ -29,7 +29,8 @@ const ROAST_SYSTEM =
   "gender, age, disability, religion, or body weight/shape — nothing cruel " +
   "about protected traits, no slurs, no hate. Keep it funny, not " +
   "mean-spirited. End with one backhanded compliment. One roast per line, " +
-  "no numbering, no intro.";
+  "each on its OWN line separated by a newline character — never " +
+  "merge roasts into one paragraph. No numbering, no intro.";
 
 export async function onRequestPost({ request, env }) {
   try {
@@ -61,7 +62,7 @@ export async function onRequestPost({ request, env }) {
     if (!description) return json({ ok: false, error: "roast_failed" }, 500);
 
     // Step 2: text model writes the roast from the description.
-    const roastRes = await env.AI.run("@cf/meta/llama-3.1-8b-instruct", {
+    const roastRes = await env.AI.run("@cf/meta/llama-3.1-8b-instruct-fp8", {
       messages: [
         { role: "system", content: ROAST_SYSTEM },
         {
