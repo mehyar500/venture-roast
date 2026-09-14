@@ -17,5 +17,5 @@ binding = "BILLING_DB"
 database_name = "mehyar_leads_prod"
 database_id = "e4f22065-e3e8-4772-87a8-51d4976be042"
 
-[[ai]]
+[ai]
 binding = "AI"
