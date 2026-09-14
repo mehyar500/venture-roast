@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RoastMe — Upload a photo. Get destroyed. (Lovingly.)</title>
+<meta name="description" content="RoastMe turns your photo into a savage-but-playful AI roast card you can share. First 2 lines free — unlock the full burn for $5.">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">🔥 ROAST<span>ME</span></div>
+  <div class="tagline">The AI that roasts you better than your friends do.</div>
+</header>
+
+<main>
+  <section class="hero" id="hero">
+    <h1>Upload a photo.<br>Get <em>destroyed</em>.<br><span class="soft">(Lovingly.)</span></h1>
+    <p class="sub">Our AI studies your pic, then writes a savage-but-playful roast card you can share anywhere. First two lines are free — the full burn is $5.</p>
+
+    <div class="uploader" id="uploader">
+      <input type="file" id="fileInput" accept="image/*" hidden>
+      <div class="dropzone" id="dropzone">
+        <div class="dz-icon">📸</div>
+        <div class="dz-text"><strong>Drop a photo here</strong> or click to pick one</div>
+        <div class="dz-hint">JPG / PNG / WebP — roasted locally, judged globally</div>
+      </div>
+      <div class="preview-wrap hidden" id="previewWrap">
+        <img id="preview" alt="Your photo, about to be roasted">
+        <button class="ghost" id="changeBtn" type="button">Pick a different photo</button>
+      </div>
+    </div>
+
+    <button class="roast-btn" id="roastBtn" type="button" disabled>🔥 ROAST ME</button>
+    <p class="fineprint">By roasting yourself you agree the AI is funnier than you.</p>
+
+    <div class="loading hidden" id="loading">
+      <div class="flame">🔥</div>
+      <div class="load-line" id="loadLine">Reading your life choices…</div>
+    </div>
+  </section>
+
+  <section class="teaser hidden" id="teaser">
+    <h2>Your roast is ready. <span class="soft">Mostly.</span></h2>
+    <div class="card">
+      <div class="card-photo"><img id="teaserPhoto" alt="Roasted photo"></div>
+      <div class="card-body">
+        <div class="card-brand">🔥 ROASTME</div>
+        <p class="roast-lines" id="teaserLines"></p>
+        <div class="locked">
+          <p class="roast-lines blurred" id="lockedLines" aria-hidden="true"></p>
+          <div class="watermark"><span>ROASTME • UNLOCK • ROASTME • UNLOCK •&nbsp;</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="unlock-box">
+      <p class="unlock-pitch">The AI went <strong>all in</strong> — <span id="lineCount"></span> lines of premium-grade destruction. Unlock the full card for <strong>$5</strong>.</p>
+      <div class="email-row">
+        <input type="email" id="emailInput" placeholder="you@example.com" autocomplete="email" inputmode="email">
+        <button class="pay-btn" id="payBtn" type="button">Unlock — $5</button>
+      </div>
+      <p class="fineprint">Receipt + card link go to your email. Secure checkout via Stripe.</p>
+      <p class="err hidden" id="payErr"></p>
+    </div>
+  </section>
+
+  <section class="fullcard hidden" id="fullcard">
+    <h2>Payment received. <span class="soft">No mercy granted.</span></h2>
+    <div class="card">
+      <div class="card-photo"><img id="fullPhoto" alt="Roasted photo"></div>
+      <div class="card-body">
+        <div class="card-brand">🔥 ROASTME</div>
+        <p class="roast-lines" id="fullLines"></p>
+        <div class="card-foot">roast.mehyar.us — share the burn</div>
+      </div>
+    </div>
+    <button class="roast-btn" id="downloadBtn" type="button">⬇ Download share card (PNG)</button>
+    <button class="ghost" id="againBtn" type="button">Roast another photo</button>
+  </section>
+
+  <div class="banner hidden" id="cancelBanner">
+    🐔 Chickened out? The roast is still waiting — your photo hasn't been judged <em>yet</em>.
+    <button class="ghost" id="retryBtn" type="button">Take me back to the burn</button>
+  </div>
+  <div class="banner hidden" id="paidBanner">⏳ Confirming your payment…</div>
+</main>
+
+<footer>
+  <p>Playful roasts only. No real humans were harmed. Not affiliated with anyone's feelings.</p>
+  <p class="fineprint">Roasts target choices — outfits, poses, backgrounds — never who you are.</p>
+</footer>
+
+<script src="/app.js"></script>
+</body>
+</html>

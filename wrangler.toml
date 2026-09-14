@@ -1,0 +1,21 @@
+name = "venture-roast"
+compatibility_date = "2026-09-01"
+pages_build_output_dir = "public"
+
+[vars]
+PRODUCT_ID = "roast-card"
+CHECKOUT_API = "https://mehyar.us/api/pay/checkout"
+BRAND_NAME = "RoastMe"
+
+[[d1_databases]]
+binding = "ROAST_DB"
+database_name = "roast_mvp"
+database_id = "94a05711-2191-4a71-a1bf-3266fc2c72d6"
+
+[[d1_databases]]
+binding = "BILLING_DB"
+database_name = "mehyar_leads_prod"
+database_id = "e4f22065-e3e8-4772-87a8-51d4976be042"
+
+[[ai]]
+binding = "AI"
