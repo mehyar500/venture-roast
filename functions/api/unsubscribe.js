@@ -2,9 +2,10 @@
 // GET /api/unsubscribe?token=…
 // One-click unsubscribe for RoastMe emails. The token is a random bearer
 // minted at capture time and stored server-side (ROAST_DB.unsub_tokens),
-// so no login is required. Opts out the roastme-brand row in the shared
-// central signup store (email_contact) — the same store every product's
-// signups flow into.
+// so no login is required. Warmup-campaign emails mint their tokens in the
+// shared CENTRAL_DB.warmup_unsub_tokens table instead — both are accepted
+// here. Opts out the roastme-brand row in the shared central signup store
+// (email_contact) — the same store every product's signups flow into.
 
 const BRAND = "roastme";
 
@@ -42,10 +43,26 @@ export async function onRequestGet({ request, env }) {
       .bind(token)
       .first()
       .catch(() => null);
-    if (!row?.email) {
+    let email = row?.email ? String(row.email) : null;
+    let warmupToken = false;
+
+    // Fall back to the shared warmup token table (CENTRAL_DB) — warmup
+    // campaign emails mint their tokens there so every brand shares one table.
+    if (!email && env?.CENTRAL_DB) {
+      const wrow = await env.CENTRAL_DB.prepare(
+        "SELECT email FROM warmup_unsub_tokens WHERE token = ? AND brand = ?"
+      )
+        .bind(token, BRAND)
+        .first()
+        .catch(() => null);
+      if (wrow?.email) {
+        email = String(wrow.email);
+        warmupToken = true;
+      }
+    }
+    if (!email) {
       return page("Link expired", "<p>This unsubscribe link was already used or is invalid. You're probably already unsubscribed — or never were. Either way: no emails from us. 🤝</p>", 400);
     }
-    const email = String(row.email);
 
     // Opt out the roastme brand row in the central store.
     let centralOk = false;
@@ -64,6 +81,12 @@ export async function onRequestGet({ request, env }) {
 
     // Burn the token — one-click links are single use.
     await db.prepare("DELETE FROM unsub_tokens WHERE token = ?").bind(token).run().catch(() => {});
+    if (warmupToken && env?.CENTRAL_DB) {
+      await env.CENTRAL_DB.prepare("DELETE FROM warmup_unsub_tokens WHERE token = ?")
+        .bind(token)
+        .run()
+        .catch(() => {});
+    }
 
     return page(
       "You're unsubscribed",
