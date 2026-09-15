@@ -1,0 +1,37 @@
+# RoastMe
+
+> RoastMe is an AI roast generator by MehyarSoft. Upload a funny photo, get a savage-but-playful AI roast card you can share.
+
+## What it is
+
+RoastMe (https://roast.mehyar.us/) turns any photo into a comedy roast card. The AI studies the photo's outfit, pose, background, expression, and photo quality, then writes 8–12 punchy one-liner roasts. Roasts target observable choices only — never race, ethnicity, gender, age, disability, religion, or body weight/shape. Playful, never cruel.
+
+## Pricing
+
+- First 2 roast lines: FREE (teaser preview, rest blurred)
+- Full roast card: $5 one-time via Stripe (full unblurred roast, high-res share card, PNG download, emailed receipt with unlock link)
+
+## How it works
+
+1. Upload a photo (JPG/PNG/WebP) on the homepage.
+2. The AI generates your roast in about 30–60 seconds; the first 2 lines are free.
+3. Enter your email and pay $5 through secure Stripe checkout to unlock the full card.
+4. Download the PNG share card and post it everywhere. Your unlock link keeps working.
+
+## Key facts
+
+- Your photo is processed to generate the roast and never stored on RoastMe servers.
+- The full roast text is kept so your unlock link keeps working.
+- Built by MehyarSoft: https://mehyar.us
+- More apps: https://mehyar.us/apps
+- Contact: https://mehyar.us/contact
+- Privacy: https://mehyar.us/privacy-policy
+- Terms: https://mehyar.us/terms
+
+## FAQ
+
+- Is it actually mean? Playful, never cruel. No slurs, no protected traits, no punching down.
+- What do I get for $5? The full unblurred roast card (8–12 lines), a high-res share card, a PNG download, and an emailed receipt with your unlock link. One payment, yours forever.
+- What happens to my photo? Processed to generate your roast, never stored.
+- Can I roast someone else? With their permission — it's a popular gift for friends with thick skin.
+- How fast is it? About 30–60 seconds from upload to teaser.

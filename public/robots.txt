@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://roast.mehyar.us/sitemap.xml

@@ -12,3 +12,11 @@ CREATE TABLE IF NOT EXISTS captures (
   roast_id TEXT,
   created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
 );
+-- One-click unsubscribe tokens (random bearers, single use). Created at
+-- capture time; the emailed link hits /api/unsubscribe?token=… which opts
+-- the address out of the central email_contact store (brand='roastme').
+CREATE TABLE IF NOT EXISTS unsub_tokens (
+  token TEXT PRIMARY KEY,
+  email TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+);

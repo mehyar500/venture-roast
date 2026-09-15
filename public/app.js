@@ -115,7 +115,14 @@
     }
     var btn = $("payBtn");
     btn.disabled = true; btn.textContent = "Working…";
-    postJSON("/api/capture", { email: email, roast_id: currentRoastId }).then(function () {
+    postJSON("/api/capture", { email: email, roast_id: currentRoastId }).then(function (capRes) {
+      if (capRes && capRes.unsub_url) {
+        var note = $("captureNote");
+        if (note) {
+          var safeUrl = String(capRes.unsub_url).replace(/"/g, "");
+          note.innerHTML = 'Receipt + card link go to your email. Secure checkout via Stripe. <a href="' + safeUrl + '">Unsubscribe anytime</a>.';
+        }
+      }
       return postJSON("/api/checkout", { email: email, roast_id: currentRoastId });
     }).then(function (res) {
       if (res.ok && res.checkout_url) {

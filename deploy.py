@@ -71,11 +71,12 @@ def mint_deploy_token():
         "not_before": "2026-09-14T00:00:00Z",
     })
     tok = ((d.get("result") or {}).get("value"))
+    tok_id = ((d.get("result") or {}).get("id"))
     if s != 200 or not tok:
         print("TOKEN MINT FAILED", s, json.dumps(d)[:300])
         sys.exit(1)
     print("deploy token minted (value redacted)")
-    return tok
+    return tok_id, tok
 
 
 def ensure_wrangler():
@@ -98,7 +99,7 @@ def main():
     print("staged ->", STAGE_DIR)
 
     # 2. token
-    token = mint_deploy_token()
+    tok_id, token = mint_deploy_token()
 
     # 3. deploy
     ensure_wrangler()
@@ -114,7 +115,13 @@ def main():
     print(p.stdout[-2500:])
     if p.stderr:
         print(p.stderr[-1000:])
-    sys.exit(p.returncode)
+    rc = p.returncode
+
+    # 4. revoke the short-lived deploy token (best-effort; quota is 50/account)
+    if tok_id:
+        s, d = cf("/user/tokens/" + tok_id, "DELETE")
+        print("deploy token revoked" if s == 200 else "token revoke skipped (status %s)" % s)
+    sys.exit(rc)
 
 
 if __name__ == "__main__":
