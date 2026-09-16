@@ -34,8 +34,9 @@ body {
 .topnav a:hover { color: var(--ink); }
 .top-cta {
   background: linear-gradient(135deg, var(--hot), var(--hot2)); color: #fff;
-  text-decoration: none; font-weight: 800; font-size: 14px;
-  padding: 9px 18px; border-radius: 10px; white-space: nowrap;
+  text-decoration: none; font-weight: 800; font-size: 15px;
+  padding: 12px 20px; border-radius: 10px; white-space: nowrap;
+  display: inline-block;
 }
 .top-cta:hover { filter: brightness(1.1); }
 
@@ -191,7 +192,7 @@ h2 .soft { font-size: 16px; }
 }
 .ghost {
   background: transparent; border: 1px solid #4a3a2b; color: var(--muted);
-  border-radius: 10px; padding: 8px 14px; margin-top: 10px; cursor: pointer; font-size: 14px;
+  border-radius: 10px; padding: 11px 16px; margin-top: 10px; cursor: pointer; font-size: 14px;
 }
 .ghost:hover { border-color: var(--hot); color: var(--ink); }
 
@@ -282,7 +283,7 @@ footer .fineprint { margin-top: 8px; }
 .foot-news input:focus { outline: none; border-color: var(--hot); }
 .foot-news button {
   background: linear-gradient(135deg, var(--hot), var(--hot2)); color: #fff; border: 0;
-  border-radius: 10px; padding: 10px 18px; font-weight: 800; cursor: pointer; font-size: 14px;
+  border-radius: 10px; padding: 12px 18px; font-weight: 800; cursor: pointer; font-size: 14px;
   white-space: nowrap;
 }
 .foot-news button:hover { filter: brightness(1.1); }
@@ -309,7 +310,7 @@ footer > .fineprint { text-align: center; }
 .modes { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 18px 0 4px; }
 .mode-pill {
   background: #171310; border: 1px solid #4a3a2b; color: var(--muted);
-  border-radius: 999px; padding: 8px 16px; font-size: 14px; font-weight: 700;
+  border-radius: 999px; padding: 12px 18px; font-size: 14px; font-weight: 700;
   cursor: pointer; transition: all .15s;
 }
 .mode-pill:hover { border-color: var(--hot); color: var(--ink); }
