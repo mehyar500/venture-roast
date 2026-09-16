@@ -76,6 +76,12 @@ async function applyEvent(env, ev) {
       binds.push(t);
       setStatus("clicked");
       break;
+    case "deferred":
+      // Transient — the receiving server asked us to retry later. Track it
+      // separately so it never inflates bounce stats.
+      sets.push("status = ?");
+      binds.push("deferred");
+      break;
     case "hard_bounce":
     case "hardbounce":
     case "soft_bounce":
@@ -84,7 +90,6 @@ async function applyEvent(env, ev) {
     case "blocked":
     case "invalid_email":
     case "invalid":
-    case "deferred":
     case "error":
       sets.push("bounced_at = COALESCE(bounced_at, ?)");
       binds.push(t);

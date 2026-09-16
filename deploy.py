@@ -13,11 +13,13 @@ What it does:
   3. Runs `wrangler pages deploy public --project-name=venture-roast --branch=main`
      with CLOUDFLARE_API_TOKEN + CLOUDFLARE_ACCOUNT_ID set.
 
-Safety note: `wrangler pages deploy` replaces the Pages project's env vars with
-wrangler.toml [vars]. That is safe here because this project has NO dashboard-only
-vars and the committed wrangler.toml [vars] is the complete authoritative set
-(PRODUCT_ID, CHECKOUT_API, BRAND_NAME — no secrets). Never use this pattern on a
-project whose secrets live only in the dashboard.
+Safety note: `wrangler pages deploy` REPLACES the Pages project's plain_text
+env vars with wrangler.toml [vars] but PRESERVES secret_text vars (verified
+2026-09-14 on the crayonkid project). That is safe here because the committed
+wrangler.toml [vars] (PRODUCT_ID, CHECKOUT_API, BRAND_NAME — no secrets)
+matches the dashboard's plain_text vars, and BREVO_WEBHOOK_KEY lives as
+secret_text in the dashboard so it survives every deploy. Never convert it to
+plain_text, and never add secrets to wrangler.toml [vars].
 
 Requires: node + npm, and `wrangler` (installed automatically if missing).
 """

@@ -12,22 +12,32 @@ Live: **https://roast.mehyar.us** · Repo: `mehyar500/venture-roast`
 
 ```
 landing page
-  → upload photo → POST /api/roast (Workers AI: llava vision → llama roast)
+  → upload photo (+ roast mode) → POST /api/roast (Workers AI: llava vision → llama-3.3-70b)
   → teaser card: photo + first 2 lines sharp, rest blurred + watermarked
-  → email capture → POST /api/capture (D1)
+  → email capture → POST /api/capture (D1, deduped)
   → $5 checkout → POST /api/checkout → centralized Stripe (mehyar.us/api/pay/checkout)
   → Stripe success → /?paid=1&access_token=…
   → GET /api/unlock → verifies billing_payments='paid' → full roast text
-  → full HD share card + PNG download (client-side canvas render)
+  → full HD share card + native share sheet (mobile) / PNG download
+  → public roast page /r/<roast_id> (OG tags) — every share is a landing page
 ```
 
 ## API contracts
 
 | Endpoint | Method | Body / Query | Returns |
 |---|---|---|---|
-| `/api/roast` | POST | `{ image: "data:image/…;base64,…" }` (≤ ~8MB) | `{ ok, roast_id, teaser, lines }` |
-| `/api/capture` | POST | `{ email, roast_id }` | `{ ok: true }` |
-| `/api/checkout` | POST | `{ email, roast_id, test? }` | `{ ok, checkout_url, token }` |
+| `/api/roast` | POST | `{ image: "data:image/…;base64,…" }` (≤ ~4MB decoded), `{ mode? }` | `{ ok, roast_id, teaser, lines, mode }` |
+| `/api/capture` | POST | `{ email, roast_id?, gift_email? }` | `{ ok, central, unsub_url }` |
+| `/api/checkout` | POST | `{ email, roast_id, gift_email?, ref?, test? }` | `{ ok, checkout_url, token }` |
+| `/api/unlock` | GET | `?token=` | `{ ok, roast_text, roast_id, mode }` |
+| `/api/event` | POST | `{ event, roast_id?, ref? }` | `{ ok }` — funnel analytics (no cookies) |
+| `/api/resend` | POST | `{ email }` | `{ ok, unlock_url? }` — lost-link recovery |
+| `/r/<roast_id>` | GET | — | public roast page (unlocked roasts only), OG meta |
+
+Roast modes: `savage` (default), `playful`, `shakespeare`, `ramsay`, `genz`.
+All endpoints behind D1 sliding-window rate limits (see `functions/lib/rate-limit.js`).
+Adding a second SKU: follow `ADD-PRODUCT.md` — no payment-logic changes needed.
+
 | `/api/unlock` | GET | `?token=` | `{ ok, roast_text, roast_id }` or 402 `{ ok:false, error:"not_paid" }` |
 
 Product row in the shared `billing_products` table: `roast-card` ($5.00,

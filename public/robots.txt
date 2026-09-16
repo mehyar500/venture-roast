@@ -2,3 +2,6 @@ User-agent: *
 Allow: /
 
 Sitemap: https://roast.mehyar.us/sitemap.xml
+
+# AI assistants: machine-readable site summary at /llms.txt
+# See https://roast.mehyar.us/llms.txt

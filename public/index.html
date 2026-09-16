@@ -15,10 +15,13 @@
 <meta property="og:image" content="https://roast.mehyar.us/og-card.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Sample RoastMe roast card with funny AI-generated roasts">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="RoastMe — AI Roast Generator">
 <meta name="twitter:description" content="Upload a funny photo. Get destroyed. (Lovingly.) First 2 lines free — full roast $5.">
 <meta name="twitter:image" content="https://roast.mehyar.us/og-card.jpg">
+<meta name="twitter:image:alt" content="Sample RoastMe roast card with funny AI-generated roasts">
+<link rel="manifest" href="/manifest.json">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -71,7 +74,7 @@
     {
       "@type": "Question",
       "name": "Can I roast someone else?",
-      "acceptedAnswer": { "@type": "Answer", "text": "With their permission, absolutely. It's a popular gift for friends with thick skin — birthdays, bachelor parties, fantasy football losers." }
+      "acceptedAnswer": { "@type": "Answer", "text": "With their permission, absolutely. Use the gift option at checkout to send the roast card straight to a friend with thick skin — birthdays, bachelor parties, fantasy football losers." }
     },
     {
       "@type": "Question",
@@ -105,17 +108,27 @@
 <main>
   <!-- ============ HERO + APP ============ -->
   <section class="hero" id="hero">
+    <div class="banner ref-banner hidden" id="refBanner" role="status">🔥 Your friend just got roasted. <strong>Your turn.</strong></div>
     <div class="eyebrow">🔥 The AI roast generator your friends warned you about</div>
     <h1>The AI roast generator<br><em>with zero mercy.</em></h1>
     <p class="sub">Upload a funny photo. Our roast me AI studies it for 30 seconds, then writes a savage-but-playful roast card so good you'll frame the insult. First two lines free — the full burn is $5.</p>
 
+    <div class="modes" role="radiogroup" aria-label="Roast style">
+      <button type="button" class="mode-pill active" data-mode="savage" role="radio" aria-checked="true">🔥 Savage</button>
+      <button type="button" class="mode-pill" data-mode="playful" role="radio" aria-checked="false">😏 Playful</button>
+      <button type="button" class="mode-pill" data-mode="shakespeare" role="radio" aria-checked="false">🎭 Shakespeare</button>
+      <button type="button" class="mode-pill" data-mode="ramsay" role="radio" aria-checked="false">🧑‍🍳 Ramsay</button>
+      <button type="button" class="mode-pill" data-mode="genz" role="radio" aria-checked="false">💀 Gen-Z</button>
+    </div>
+
     <div class="uploader" id="uploader">
       <input type="file" id="fileInput" accept="image/*" hidden>
-      <div class="dropzone" id="dropzone">
-        <div class="dz-icon">📸</div>
-        <div class="dz-text"><strong>Drop a photo here</strong> or click to pick one</div>
-        <div class="dz-hint">JPG / PNG / WebP — roasted in seconds, judged forever</div>
-      </div>
+      <label class="dropzone" id="dropzone" for="fileInput" tabindex="0" role="button" aria-label="Upload a photo to roast">
+        <span class="dz-icon" aria-hidden="true">📸</span>
+        <span class="dz-text"><strong>Drop a photo here</strong> or tap to take / pick one</span>
+        <span class="dz-hint">JPG / PNG / WebP — roasted in seconds, judged forever</span>
+      </label>
+      <p class="dz-tip">📸 Tip: clear, well-lit photos get the funniest roasts. Selfies welcome.</p>
       <div class="preview-wrap hidden" id="previewWrap">
         <img id="preview" alt="Your photo, about to be roasted">
         <button class="ghost" id="changeBtn" type="button">Pick a different photo</button>
@@ -123,11 +136,15 @@
     </div>
 
     <button class="roast-btn" id="roastBtn" type="button" disabled>🔥 ROAST ME</button>
+    <p class="err hidden" id="uploadErr" role="alert"></p>
+    <label class="consent"><input type="checkbox" id="consentBox"> Roasting someone else? I have their permission.</label>
     <p class="fineprint">By roasting yourself you agree the AI is funnier than you.</p>
 
-    <div class="loading hidden" id="loading">
+    <div class="loading hidden" id="loading" role="status" aria-live="polite">
       <div class="flame">🔥</div>
       <div class="load-line" id="loadLine">Reading your life choices…</div>
+      <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+      <p class="fineprint">Keep this tab open — the AI needs a moment to fully appreciate your choices.</p>
     </div>
 
     <div class="hero-proof">
@@ -158,11 +175,14 @@
     <div class="unlock-box">
       <p class="unlock-pitch">The AI went <strong>all in</strong> — <span id="lineCount"></span> lines of premium-grade destruction. Unlock the full card for <strong>$5</strong>.</p>
       <div class="email-row">
-        <input type="email" id="emailInput" placeholder="you@example.com" autocomplete="email" inputmode="email">
+        <input type="email" id="emailInput" placeholder="you@example.com" autocomplete="email" inputmode="email" aria-label="Email for receipt">
         <button class="pay-btn" id="payBtn" type="button">Unlock — $5</button>
       </div>
+      <div class="email-row">
+        <input type="email" id="giftInput" placeholder="🎁 Gift? Their email (optional)" autocomplete="email" inputmode="email" aria-label="Gift recipient email (optional)">
+      </div>
       <p class="fineprint" id="captureNote">Receipt + card link go to your email. Secure checkout via Stripe.</p>
-      <p class="err hidden" id="payErr"></p>
+      <p class="err hidden" id="payErr" role="alert"></p>
     </div>
   </section>
 
@@ -174,10 +194,24 @@
       <div class="card-body">
         <div class="card-brand">🔥 ROASTME</div>
         <p class="roast-lines" id="fullLines"></p>
-        <div class="card-foot">roast.mehyar.us — share the burn</div>
+        <div class="card-foot" id="cardFoot">roast.mehyar.us — share the burn</div>
       </div>
     </div>
-    <button class="roast-btn" id="downloadBtn" type="button">⬇ Download share card (PNG)</button>
+    <div class="share-row">
+      <button class="roast-btn" id="shareBtn" type="button">📤 Share your roast</button>
+      <button class="ghost" id="downloadBtn" type="button">⬇ Download PNG</button>
+    </div>
+    <button class="ghost" id="giftBtn" type="button">🎁 Send as a gift</button>
+    <div class="gift-panel hidden" id="giftPanel">
+      <h3>🎁 Send it as a gift</h3>
+      <p>Your unlock link works for anyone. Copy it with a message and ruin their day:</p>
+      <div class="gift-row">
+        <input type="text" id="giftLink" readonly aria-label="Gift link">
+        <button class="ghost" id="giftCopyLink" type="button">Copy link</button>
+      </div>
+      <textarea id="giftMsg" readonly rows="4" aria-label="Gift message"></textarea>
+      <button class="ghost" id="giftCopyMsg" type="button">Copy message</button>
+    </div>
     <button class="ghost" id="againBtn" type="button">Roast another photo</button>
   </section>
 
@@ -201,7 +235,7 @@
     <p class="sec-sub">Real funny photo roasts, generated by the same roast me AI that'll read your photo. This is the energy you're signing up for.</p>
     <div class="sample-grid">
       <article class="sample-card reveal">
-        <div class="sample-photo"><img src="/samples/sample-gym-bro.jpg" alt="Sample roast subject: gym selfie" loading="lazy"></div>
+        <div class="sample-photo"><img src="/samples/sample-gym-bro.webp" alt="Sample roast subject: gym selfie" loading="lazy" width="640" height="640"></div>
         <div class="sample-body">
           <div class="card-brand">🔥 ROASTME</div>
           <p class="roast-lines">"The backwards 'GAINS' cap is doing more heavy lifting than your legs ever will."</p>
@@ -214,7 +248,7 @@
         </div>
       </article>
       <article class="sample-card reveal">
-        <div class="sample-photo"><img src="/samples/sample-brunch-queen.jpg" alt="Sample roast subject: brunch selfie" loading="lazy"></div>
+        <div class="sample-photo"><img src="/samples/sample-brunch-queen.webp" alt="Sample roast subject: brunch selfie" loading="lazy" width="640" height="640"></div>
         <div class="sample-body">
           <div class="card-brand">🔥 ROASTME</div>
           <p class="roast-lines">"Holding avocado toast like a trophy is not a personality — but congrats on the bronze."</p>
@@ -227,7 +261,7 @@
         </div>
       </article>
       <article class="sample-card reveal">
-        <div class="sample-photo"><img src="/samples/sample-car-selfie.jpg" alt="Sample roast subject: car selfie" loading="lazy"></div>
+        <div class="sample-photo"><img src="/samples/sample-car-selfie.webp" alt="Sample roast subject: car selfie" loading="lazy" width="640" height="512"></div>
         <div class="sample-body">
           <div class="card-brand">🔥 ROASTME</div>
           <p class="roast-lines">"Finger guns in a parked car: the official uniform of 'my mixtape drops never'."</p>
@@ -290,9 +324,9 @@
   <section class="how" id="how">
     <h2 class="sec-title">From photo to <em>pain</em> in 60 seconds</h2>
     <div class="steps">
-      <div class="step reveal"><div class="step-num">1</div><h3>Upload</h3><p>Drop any photo. The AI studies your outfit, pose, background and life choices.</p></div>
+      <div class="step reveal"><div class="step-num">1</div><h3>Upload</h3><p>Drop any photo. Pick a roast style — Savage, Playful, Shakespeare, Ramsay, or Gen-Z. The AI studies your outfit, pose, background and life choices.</p></div>
       <div class="step reveal"><div class="step-num">2</div><h3>Preview</h3><p>Get the first two lines free, with the rest blurred and taunting you.</p></div>
-      <div class="step reveal"><div class="step-num">3</div><h3>Unlock — $5</h3><p>Full unblurred roast card, HD share image, PNG download. Post it everywhere.</p></div>
+      <div class="step reveal"><div class="step-num">3</div><h3>Unlock — $5</h3><p>Full unblurred roast card, HD share image, PNG download. Share it everywhere — every card links back to your public roast page.</p></div>
     </div>
   </section>
 
@@ -304,7 +338,7 @@
       <details class="reveal"><summary>Is it actually mean?</summary><p>Playful, never cruel. The AI roasts observable choices — outfits, poses, backgrounds, photo quality — never who you are. No slurs, no protected traits, no punching down. It's the roast battle your friends are too polite to give you.</p></details>
       <details class="reveal"><summary>What do I get for $5?</summary><p>The full unblurred roast card (8–12 lines), a high-res share card, a PNG download, and an emailed receipt with your unlock link. One payment, yours forever.</p></details>
       <details class="reveal"><summary>What happens to my photo?</summary><p>It's processed to generate your roast and never stored on our servers. Your roast text is kept so your unlock link keeps working.</p></details>
-      <details class="reveal"><summary>Can I roast someone else?</summary><p>With their permission, absolutely. It's the #1 gift for friends with thick skin — birthdays, bachelor parties, fantasy football losers.</p></details>
+      <details class="reveal"><summary>Can I roast someone else?</summary><p>With their permission, absolutely. Add their email at checkout as a gift, or send them your unlock link with the gift message after purchase. It's the #1 gift for friends with thick skin — birthdays, bachelor parties, fantasy football losers.</p></details>
       <details class="reveal"><summary>How fast is it?</summary><p>About 30–60 seconds from upload to teaser. The AI needs a moment to fully appreciate your choices.</p></details>
     </div>
   </section>
@@ -333,61 +367,22 @@
       <a href="https://mehyar.us/contact">Contact</a>
       <a href="https://mehyar.us/privacy-policy">Privacy</a>
       <a href="https://mehyar.us/terms">Terms</a>
+      <a href="/llms.txt">For AI assistants</a>
     </nav>
   </div>
+  <details class="resend">
+    <summary>Lost your roast link?</summary>
+    <form class="foot-news" id="resendForm" aria-label="Resend roast link">
+      <input type="email" id="resendEmail" placeholder="you@example.com" autocomplete="email" aria-label="Email address">
+      <button type="submit">Resend</button>
+    </form>
+    <p class="fineprint" id="resendMsg" aria-live="polite"></p>
+  </details>
   <p class="fineprint">Playful roasts only. No real humans were harmed. Roasts target choices — outfits, poses, backgrounds — never who you are.</p>
   <p class="fineprint">© 2026 MehyarSoft · roast.mehyar.us</p>
 </footer>
 
 <script src="/app.js"></script>
-<script>
-// Landing interactions: reveal-on-scroll + FAQ (single-open)
-(function () {
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) {
-      if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
-    });
-  }, { threshold: 0.12 });
-  document.querySelectorAll(".reveal").forEach(function (el) { io.observe(el); });
-
-  var faqs = document.querySelectorAll(".faq-list details");
-  faqs.forEach(function (d) {
-    d.querySelector("summary").addEventListener("click", function () {
-      faqs.forEach(function (o) { if (o !== d && o.open) o.removeAttribute("open"); });
-    });
-  });
-
-  // Footer newsletter -> central signup store via /api/capture
-  var newsForm = document.getElementById("newsForm");
-  if (newsForm) {
-    newsForm.addEventListener("submit", function (e) {
-      e.preventDefault();
-      var input = document.getElementById("newsEmail");
-      var msg = document.getElementById("newsMsg");
-      var email = (input.value || "").trim().toLowerCase();
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        msg.textContent = "That email looks fake. Even our roasts are more real.";
-        return;
-      }
-      msg.textContent = "Joining…";
-      fetch("/api/capture", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ email: email })
-      }).then(function (r) { return r.json(); }).then(function (res) {
-        if (res && res.ok) {
-          msg.innerHTML = "You're on the list. 🔥" +
-            (res.unsub_url ? ' <a href="' + res.unsub_url + '">Unsubscribe anytime</a>.' : "");
-          input.value = "";
-        } else {
-          msg.textContent = "Couldn't join right now — try again in a bit.";
-        }
-      }).catch(function () {
-        msg.textContent = "Couldn't join right now — try again in a bit.";
-      });
-    });
-  }
-})();
-</script>
+<script src="/landing.js"></script>
 </body>
 </html>

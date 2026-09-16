@@ -1,0 +1,18 @@
+# public/_headers — security headers for RoastMe.
+# NOTE on deploys: `wrangler pages deploy` REPLACES the Pages project's env
+# vars with wrangler.toml [vars] for plain_text vars, but PRESERVES
+# secret_text vars (verified 2026-09-14 on the crayonkid project).
+# BREVO_WEBHOOK_KEY is stored as secret_text on the venture-roast project —
+# it survives every deploy. Never convert it to plain_text.
+
+# NOTE: ?paid=1&access_token= variants are noindexed via a JS-injected
+# <meta name="robots" content="noindex"> in app.js (_headers rules can't
+# match query strings).
+
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Cross-Origin-Opener-Policy: same-origin
+  Content-Security-Policy: default-src 'self'; img-src 'self' data: blob:; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'
+  Permissions-Policy: camera=(self), microphone=(), geolocation=()
