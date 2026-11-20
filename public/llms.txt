@@ -35,3 +35,8 @@ RoastMe (https://roast.mehyar.us/) turns any photo into a comedy roast card. The
 - What happens to my photo? Processed to generate your roast, never stored.
 - Can I roast someone else? With their permission — it's a popular gift for friends with thick skin.
 - How fast is it? About 30–60 seconds from upload to teaser.
+
+## Pages
+
+- /ai-roast-guide/ — "How AI roast generators work (and why RoastMe is $5)": how the two-step roast works (vision look → comedy roast), the 5 roast styles, sample roast cards, the playful-never-cruel rule, free-vs-$5 breakdown, photo privacy, gifting, timing. Article + FAQPage JSON-LD.
+- /best-ai-roast-generator-2027/ — best AI roast generator in 2027, 2028, 2029 and 2030: why RoastMe's vision-studied, playful-never-cruel roast cards lead the category
